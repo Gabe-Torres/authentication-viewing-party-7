@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'welcome#index'
+  resources :users, only: [:show] 
   
   get '/register', to: 'users#new'
   post '/users', to: 'users#create'
@@ -7,6 +8,9 @@ Rails.application.routes.draw do
   get '/users/:user_id/movies/:id', to: 'movies#show', as: 'movie'
   get "/login", to: "users#login_form"
   post "/login", to: "users#login"
-  
-  resources :users, only: [:show] 
+  get "/logout", to: "users#logout"
+
+  namespace :admin do
+    get '/dashboard', to: 'dashboard#index'
+  end
 end

@@ -10,22 +10,49 @@ class UsersController <ApplicationController
   end
 
   def login
+    # require 'pry'; binding.pry
     user = User.find_by(email: params[:email])
-    if user.authenticate(params[:password])
+    if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to user_path(user)
+      flash[:success] = "Welcome, #{user.name}!"
+      # redirect_to user_path(user)
+    # else
+      if user.admin?
+        redirect_to admin_dashboard_path
+      elsif user.manager?
+        redirect_to root_path
+      elsif 
+        redirect_to root_path
+      end
     else
       flash[:error] = "Incorrect credentials"
       render :login_form
     end
   end
 
+  def logout
+    session.delete(User.find(session[:user_id]))
+    redirect_to root_path
+  end
+
+  # def create
+  #   user = User.new(user_params)
+  #   if user.save
+  #     redirect_to user_path(user)
+  #   else
+  #     flash[:error] = user.errors.full_messages.to_sentence
+  #     redirect_to register_path
+  #   end
+  # end
+
   def create
-    user = User.new(user_params)
-    if user.save
-      redirect_to user_path(user)
-    else
-      flash[:error] = user.errors.full_messages.to_sentence
+    new_user = User.new(user_params)
+    if new_user.save
+      redirect_to user_path(new_user)
+      session[:user_id] = new_user.id
+      flash[:success] = "Welcome, #{new_user.name}!"
+    elsif
+      flash[:error] = new_user.errors.full_messages.to_sentence
       redirect_to register_path
     end
   end

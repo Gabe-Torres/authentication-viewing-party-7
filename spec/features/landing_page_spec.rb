@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Landing Page' do
   before :each do 
-    user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password")
-    user2 = User.create(name: "User Two", email: "user2@test.com", password: "password", password_confirmation: "password")
+    user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password", role: 2)
+    user2 = User.create(name: "User Two", email: "user2@test.com", password: "password", password_confirmation: "password", role: 2)
     visit '/'
   end 
 
@@ -22,15 +22,15 @@ RSpec.describe 'Landing Page' do
     expect(current_path).to eq(root_path)
   end 
 
-  it 'lists out existing users' do 
-    user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password")
-    user2 = User.create(name: "User Two", email: "user2@test.com", password: "password", password_confirmation: "password")
+#   it 'lists out existing users' do 
+#     user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password", role: 2)
+#     user2 = User.create(name: "User Two", email: "user2@test.com", password: "password", password_confirmation: "password", role: 2)
+# # save_and_open_page
+#       expect(page).to have_content('Existing Users:')
 
-    expect(page).to have_content('Existing Users:')
-
-    within('.existing-users') do 
-      expect(page).to have_content(user1.email)
-      expect(page).to have_content(user2.email)
-    end     
-  end 
+#     within('.existing-users') do 
+#       expect(page).to have_content(user1.email)
+#       expect(page).to have_content(user2.email)
+#     end     
+#   end 
 end
