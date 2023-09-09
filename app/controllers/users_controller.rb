@@ -6,11 +6,16 @@ class UsersController <ApplicationController
   def login_form; end
 
   def show
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
+    # @user = User.find(session[:user_id])
+    if current_user
+      @user = current_user
+    else
+      redirect_to root_path, notice: "You must be logged in or registered to access your dashboard."
+    end
   end
 
   def login
-    # require 'pry'; binding.pry
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
@@ -35,16 +40,6 @@ class UsersController <ApplicationController
     redirect_to root_path
   end
 
-  # def create
-  #   user = User.new(user_params)
-  #   if user.save
-  #     redirect_to user_path(user)
-  #   else
-  #     flash[:error] = user.errors.full_messages.to_sentence
-  #     redirect_to register_path
-  #   end
-  # end
-
   def create
     new_user = User.new(user_params)
     if new_user.save
@@ -55,6 +50,16 @@ class UsersController <ApplicationController
       flash[:error] = new_user.errors.full_messages.to_sentence
       redirect_to register_path
     end
+    # ? not sure which create method is more suitable
+    # new_user = User.create!(user_params)
+    # if new_user.save
+    #   redirect_to dashboard_users_path(new_user)
+    #   session[:user_id] = new_user.id
+    #   flash[:success] = "Welcome, #{new_user.name}!"
+    # else
+    #   flash[:error] = new_user.errors.full_messages.to_sentence
+    #   redirect_to register_path
+    # end
   end
 
   private

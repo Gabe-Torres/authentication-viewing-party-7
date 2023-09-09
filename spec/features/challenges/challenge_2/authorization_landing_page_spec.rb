@@ -10,6 +10,14 @@ RSpec.describe 'Landing Page Authorization' do
       # expect(page).to_not have_content(u1.name)
       expect(page).to_not have_content('Existing Users')
     end
+    scenario 'I should not be able to access dashboard' do
+      visit root_path
+
+      visit dashboard_path
+
+      expect(page).to have_content('You must be logged in or registered to access your dashboard.')
+      expect(current_path).to eq(root_path)
+    end
   end
   context 'I visit the landing page as a registered user' do
     before :each do
