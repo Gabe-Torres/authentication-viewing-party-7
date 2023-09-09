@@ -31,7 +31,7 @@ class UsersController <ApplicationController
   end
 
   def logout
-    session.delete(User.find(session[:user_id]))
+    session.clear
     redirect_to root_path
   end
 
@@ -48,7 +48,7 @@ class UsersController <ApplicationController
   def create
     new_user = User.new(user_params)
     if new_user.save
-      redirect_to user_path(new_user)
+      redirect_to dashboard_path(new_user)
       session[:user_id] = new_user.id
       flash[:success] = "Welcome, #{new_user.name}!"
     elsif

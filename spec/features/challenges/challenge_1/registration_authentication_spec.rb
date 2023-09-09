@@ -14,7 +14,7 @@ RSpec.describe 'Registration' do
       fill_in 'user[password_confirmation]', with: password
       click_on 'Create New User'
 
-      expect(current_path).to eq(user_path(User.last.id))
+      expect(current_path).to eq(dashboard_path(User.last.id))
     end
   end
 
