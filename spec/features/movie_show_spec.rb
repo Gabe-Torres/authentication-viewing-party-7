@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Movies Index Page' do
   before do 
-    @user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password")
-    i = 1
-    20.times do 
-      Movie.create(title: "Movie #{i} Title", rating: rand(1..10), description: "This is a description about Movie #{i}")
-      i+=1
-    end 
+    @user1 = User.create(name: "User One", email: "user1@test.com", password: "password", password_confirmation: "password", role: 1)
+    # i = 1
+    # 20.times do 
+    #   Movie.create(title: "Movie #{i} Title", rating: rand(1..10), description: "This is a description about Movie #{i}")
+    #   i+=1
+    # end 
 
     visit root_path
     click_on 'I already have an account'
@@ -17,21 +17,22 @@ RSpec.describe 'Movies Index Page' do
   end 
 
   it 'shows all movies' do 
+    movie = Movie.create(title: "Movie 1 Title", rating: 5, description: "This is a description about Movie 1", id: 1)
     visit dashboard_path(@user1)
     click_button "Find Top Rated Movies"
 
-    expect(current_path).to eq("/users/#{@user1.id}/movies")
+    expect(current_path).to eq(movies_path(@user1))
 
     expect(page).to have_content("Top Rated Movies")
-    
-    movie_1 = Movie.first
+    # binding.pry
+    # movie_1 = Movie.last
 
-    click_link(movie_1.title)
+    click_link(movie.title)
 
-    expect(current_path).to eq("/users/#{@user1.id}/movies/#{movie_1.id}")
+    expect(current_path).to eq("/movies/#{movie.id}")
 
-    expect(page).to have_content(movie_1.title)
-    expect(page).to have_content(movie_1.description)
-    expect(page).to have_content(movie_1.rating)
+    expect(page).to have_content(movie.title)
+    expect(page).to have_content(movie.description)
+    expect(page).to have_content(movie.rating)
   end 
 end
